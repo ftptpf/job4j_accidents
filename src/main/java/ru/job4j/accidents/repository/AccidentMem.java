@@ -5,6 +5,7 @@ import ru.job4j.accidents.model.Accident;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -30,8 +31,23 @@ public class AccidentMem implements Store<Accident> {
 
     }
 
+    public void create(int id, Accident accident) {
+        store.put(id, accident);
+    }
+
     public Collection<Accident> findAll() {
         return store.values();
     }
+
+    public Optional<Accident> findById(int id) {
+        return Optional.ofNullable(store.get(id));
+    }
+
+/*    public void update(int id, Accident accident) {
+        store.putIfAbsent()
+    }*/
+
+
+
 
 }
