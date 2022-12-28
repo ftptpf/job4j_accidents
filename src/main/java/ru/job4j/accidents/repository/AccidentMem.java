@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class AccidentMem implements Store {
+public class AccidentMem implements Store<Accident> {
     private final Map<Integer, Accident> store = new ConcurrentHashMap<>();
 
     private AccidentMem() {
@@ -33,5 +33,5 @@ public class AccidentMem implements Store {
     public Collection<Accident> findAll() {
         return store.values();
     }
-}
 
+}

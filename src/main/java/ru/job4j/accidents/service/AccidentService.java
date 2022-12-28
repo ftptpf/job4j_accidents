@@ -6,10 +6,10 @@ import ru.job4j.accidents.repository.Store;
 
 import java.util.Collection;
 @Service
-public class AccidentService {
-    private final Store store;
+public class AccidentService implements ServiceInt<Accident> {
+    private final Store<Accident> store;
 
-    public AccidentService(Store store) {
+    public AccidentService(Store<Accident> store) {
         this.store = store;
     }
 

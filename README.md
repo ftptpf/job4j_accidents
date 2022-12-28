@@ -1,5 +1,5 @@
 # job4j_accidents
-
+[![Build Status](https://app.travis-ci.com/ftptpf/job4j_accidents.svg?branch=master)](https://app.travis-ci.com/ftptpf/job4j_accidents)
 
 ## Проект "Автонарушители"
 
