@@ -5,7 +5,6 @@ import ru.job4j.accidents.model.Accident;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -31,23 +30,58 @@ public class AccidentMem implements Store<Accident> {
 
     }
 
-    public void create(int id, Accident accident) {
-        store.put(id, accident);
+    /**
+     * Создание автонарушения.
+     * @param id ключ map
+     * @param accident автонарушение
+     * @return
+     */
+    public Accident create(int id, Accident accident) {
+        return store.put(id, accident);
     }
 
+    /**
+     * Поиск всех автонарушений.
+     * @return коллекция найденных значений
+     */
     public Collection<Accident> findAll() {
         return store.values();
     }
 
-    public Optional<Accident> findById(int id) {
-        return Optional.ofNullable(store.get(id));
+    /**
+     * Поиск конкретного автонарушения по ключу.
+     * @param id ключ map
+     * @return значение которое, соответствует ключу, или null если не найден ключ в map
+     */
+    public Accident findById(int id) {
+        return store.get(id);
     }
 
-/*    public void update(int id, Accident accident) {
-        store.putIfAbsent()
-    }*/
+    /**
+     * Обновление информации автонарушения по ключу.
+     * Замена записи для указанного ключа происходит только в том случае,
+     * если в данный момент она сопоставлена с некоторым значением.
+     * @param id ключ map
+     * @param accident значение которое, соответствовало ключу, или null если не найден ключ в map
+     */
+    public void update(int id, Accident accident) {
+        store.replace(id, accident);
+    }
 
+    /**
+     * Удаление конкретного автонарушения по ключу.
+     * @param id ключ map
+     * @return значение которое, соответствовало ключу, или null если не найден ключ в map
+     */
+    public Accident remove(int id) {
+        return store.remove(id);
+    }
 
-
+    /**
+     * Удаление всех автонарушений.
+     */
+    public void removeAll() {
+        store.clear();
+    }
 
 }
