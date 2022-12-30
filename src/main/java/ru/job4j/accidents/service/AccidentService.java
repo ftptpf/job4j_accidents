@@ -1,11 +1,12 @@
 package ru.job4j.accidents.service;
 
+import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.repository.Store;
 
 import java.util.Collection;
-@org.springframework.stereotype.Service
-public class AccidentService implements Service<Accident> {
+@Service
+public class AccidentService implements CrudService<Accident> {
     private final Store<Accident> store;
 
     public AccidentService(Store<Accident> store) {
