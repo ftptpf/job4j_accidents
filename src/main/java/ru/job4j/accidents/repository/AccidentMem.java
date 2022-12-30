@@ -69,8 +69,7 @@ public class AccidentMem implements Store<Accident> {
      * @return true - если запись значения обновилась, false - если обновление не произошло
      */
     public boolean update(Accident accident) {
-        Accident accidentInStore = store.replace(accident.getId(), accident);
-        return accident.equals(accidentInStore);
+        return store.replace(accident.getId(), accident) != null;
     }
 
     /**
