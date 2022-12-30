@@ -5,10 +5,13 @@ import ru.job4j.accidents.model.Accident;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class AccidentMem implements Store<Accident> {
+    private final AtomicInteger mapKey = new AtomicInteger(4);
     private final Map<Integer, Accident> store = new ConcurrentHashMap<>();
 
     private AccidentMem() {
@@ -32,13 +35,13 @@ public class AccidentMem implements Store<Accident> {
 
     /**
      * Создание автонарушения.
-     * Если под данным ключом в map уже хранилось какое-то значение - оно перезапишется
-     * @param id ключ map
      * @param accident автонарушение
-     * @return значение которое, соответствовало ключу, или null если не найден ключ в map
+     * @return если ключа в map еще нет вернет Optional со значением, в ином случае пустой Optional
      */
-    public Accident create(int id, Accident accident) {
-        return store.put(id, accident);
+    public Optional<Accident> create(Accident accident) {
+        accident.setId(mapKey.getAndIncrement());
+        Accident createAccident = store.putIfAbsent(accident.getId(), accident);
+        return Optional.ofNullable(createAccident);
     }
 
     /**
@@ -52,31 +55,31 @@ public class AccidentMem implements Store<Accident> {
     /**
      * Поиск конкретного автонарушения по ключу.
      * @param id ключ map
-     * @return значение которое, соответствует ключу, или null если не найден ключ в map
+     * @return Optional с найденным значением, либо пустой Optional
      */
-    public Accident findById(int id) {
-        return store.get(id);
+    public Optional<Accident> findById(int id) {
+        return Optional.ofNullable(store.get(id));
     }
 
     /**
      * Обновление информации автонарушения по ключу.
      * Замена записи для указанного ключа происходит только в том случае,
      * если в данный момент она сопоставлена с некоторым значением.
-     * @param id ключ map
      * @param accident автонарушение
-     * @return значение которое, соответствовало ключу, или null если не найден ключ в map
+     * @return true - если запись значения обновилась, false - если обновление не произошло
      */
-    public Accident update(int id, Accident accident) {
-        return store.replace(id, accident);
+    public boolean update(Accident accident) {
+        Accident accidentInStore = store.replace(accident.getId(), accident);
+        return accident.equals(accidentInStore);
     }
 
     /**
      * Удаление конкретного автонарушения по ключу.
      * @param id ключ map
-     * @return значение которое, соответствовало ключу, или null если не найден ключ в map
+     * @return true - если удаление прошло успешно, в ином случае false
      */
-    public Accident remove(int id) {
-        return store.remove(id);
+    public boolean remove(int id) {
+        return store.remove(id) != null;
     }
 
     /**
