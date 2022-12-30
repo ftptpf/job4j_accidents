@@ -32,9 +32,10 @@ public class AccidentMem implements Store<Accident> {
 
     /**
      * Создание автонарушения.
+     * Если под данным ключом в map уже хранилось какое-то значение - оно перезапишется
      * @param id ключ map
      * @param accident автонарушение
-     * @return
+     * @return значение которое, соответствовало ключу, или null если не найден ключ в map
      */
     public Accident create(int id, Accident accident) {
         return store.put(id, accident);
@@ -62,10 +63,11 @@ public class AccidentMem implements Store<Accident> {
      * Замена записи для указанного ключа происходит только в том случае,
      * если в данный момент она сопоставлена с некоторым значением.
      * @param id ключ map
-     * @param accident значение которое, соответствовало ключу, или null если не найден ключ в map
+     * @param accident автонарушение
+     * @return значение которое, соответствовало ключу, или null если не найден ключ в map
      */
-    public void update(int id, Accident accident) {
-        store.replace(id, accident);
+    public Accident update(int id, Accident accident) {
+        return store.replace(id, accident);
     }
 
     /**

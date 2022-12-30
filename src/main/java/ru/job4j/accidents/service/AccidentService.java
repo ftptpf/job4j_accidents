@@ -24,8 +24,8 @@ public class AccidentService implements Service<Accident> {
         return store.findById(id);
     }
 
-    public void update(int id, Accident accident) {
-        store.update(id, accident);
+    public Accident update(int id, Accident accident) {
+        return store.update(id, accident);
     }
 
     public Accident remove(int id) {
