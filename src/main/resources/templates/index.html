@@ -23,7 +23,7 @@
 <body>
 <div class="container">
     <div th:insert="menu"></div>
-    <div class="row">
+    <div class="row pt-3" >
         <div class="card" style="width: 100%">
             <div class="card-body">
                 <div>
@@ -42,7 +42,14 @@
                         <tbody>
                         <tr th:each="accident: ${accidents}">
                             <td th:text="${accident.id}" />
-                            <td th:text="${accident.name}" />
+                            <td>
+                                <a>
+                                    <a th:href="@{|/formUpdateAccident?id=${accident.id}|}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                <span th:text="${accident.name}"></span>
+                                </a>
+                            </td>
                             <td th:text="${accident.text}" />
                             <td th:text="${accident.address}" />
                         </tr>

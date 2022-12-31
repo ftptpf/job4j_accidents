@@ -3,6 +3,7 @@ package ru.job4j.accidents.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.repository.Store;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AccidentService implements CrudService<Accident> {
-    private final CrudService<Accident> store;
+    private final Store<Accident> store;
 
     public Optional<Accident> create(Accident accident) {
         return store.create(accident);
