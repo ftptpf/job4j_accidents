@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.service.Service;
+import ru.job4j.accidents.service.CrudService;
 
 @Controller
 @AllArgsConstructor
 public class AccidentController {
-    private final Service<Accident> service;
+    private final CrudService<Accident> service;
 
     @GetMapping("/createAccident")
     public String viewCreateAccident() {
