@@ -2,34 +2,36 @@ package ru.job4j.accidents.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.repository.Store;
+import ru.job4j.accidents.repository.CrudService;
 
 import java.util.Collection;
+import java.util.Optional;
+
 @Service
 public class AccidentService implements CrudService<Accident> {
-    private final Store<Accident> store;
+    private final CrudService<Accident> store;
 
-    public AccidentService(Store<Accident> store) {
+    public AccidentService(CrudService<Accident> store) {
         this.store = store;
     }
 
-    public Accident create(int id, Accident accident) {
-        return store.create(id, accident);
+    public Optional<Accident> create(Accident accident) {
+        return store.create(accident);
     }
 
     public Collection<Accident> findAll() {
         return store.findAll();
     }
 
-    public Accident findById(int id) {
+    public Optional<Accident> findById(int id) {
         return store.findById(id);
     }
 
-    public Accident update(int id, Accident accident) {
-        return store.update(id, accident);
+    public boolean update(Accident accident) {
+        return store.update(accident);
     }
 
-    public Accident remove(int id) {
+    public boolean remove(int id) {
         return store.remove(id);
     }
 
