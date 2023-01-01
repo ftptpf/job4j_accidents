@@ -41,7 +41,7 @@ public class AccidentMem implements Store<Accident> {
     public Optional<Accident> create(Accident accident) {
         accident.setId(mapKey.getAndIncrement());
         Accident createAccident = store.putIfAbsent(accident.getId(), accident);
-        return Optional.ofNullable(createAccident);
+        return createAccident == null ? Optional.of(accident) : Optional.empty();
     }
 
     /**

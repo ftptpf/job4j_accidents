@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.service.CrudService;
 
+import java.util.Optional;
+
 @Controller
 @AllArgsConstructor
 public class AccidentController {
@@ -18,21 +20,36 @@ public class AccidentController {
     }
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident) {
-        service.create(accident);
-        return "redirect:/index";
+    public String save(@ModelAttribute Accident accident, Model model) {
+        Optional<Accident> accidentOptional = service.create(accident);
+        if (accidentOptional.isEmpty()) {
+            model.addAttribute("message", "Ошибка при сохранении автомобильного инцидента в базе.");
+            return "error";
+        } else {
+            return "redirect:/index";
+        }
     }
 
     @GetMapping("/formUpdateAccident")
     public String updateForm(@RequestParam("id") int id, Model model) {
-        model.addAttribute("accident", service.findById(id).get());
-        return "editAccident";
+        Optional<Accident> accidentOptional = service.findById(id);
+        if (accidentOptional.isEmpty()) {
+            model.addAttribute("message", "Ошибка. Автомобильный инцидент в базе не найден.");
+            return "error";
+        } else {
+            model.addAttribute("accident", accidentOptional.get());
+            return "editAccident";
+        }
     }
 
     @PostMapping("/editAccident")
-    public String update(@ModelAttribute Accident accident) {
-        service.update(accident);
-        return "redirect:/index";
+    public String update(@ModelAttribute Accident accident, Model model) {
+        if (!service.update(accident)) {
+            model.addAttribute("message", "Ошибка при обновлении информации о автомобильном инциденте.");
+            return "error";
+        } else {
+            return "redirect:/index";
+        }
     }
 
 
