@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.service.CrudService;
 
 import java.util.Optional;
@@ -12,10 +13,11 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 public class AccidentController {
-    private final CrudService<Accident> service;
+    private final CrudService<Accident, AccidentType> service;
 
     @GetMapping("/createAccident")
-    public String viewCreateAccident() {
+    public String viewCreateAccident(Model model) {
+        model.addAttribute("types", service.findAllTypes());
         return "createAccident";
     }
 
@@ -37,6 +39,7 @@ public class AccidentController {
             return "error";
         }
         model.addAttribute("accident", accidentOptional.get());
+        model.addAttribute("types", service.findAllTypes());
         return "editAccident";
     }
 
