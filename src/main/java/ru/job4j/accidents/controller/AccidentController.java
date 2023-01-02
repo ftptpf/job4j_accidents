@@ -25,9 +25,8 @@ public class AccidentController {
         if (accidentOptional.isEmpty()) {
             model.addAttribute("message", "Ошибка при сохранении автомобильного инцидента в базе.");
             return "error";
-        } else {
-            return "redirect:/index";
         }
+        return "redirect:/index";
     }
 
     @GetMapping("/formUpdateAccident")
@@ -36,10 +35,9 @@ public class AccidentController {
         if (accidentOptional.isEmpty()) {
             model.addAttribute("message", "Ошибка. Автомобильный инцидент в базе не найден.");
             return "error";
-        } else {
-            model.addAttribute("accident", accidentOptional.get());
-            return "editAccident";
         }
+        model.addAttribute("accident", accidentOptional.get());
+        return "editAccident";
     }
 
     @PostMapping("/editAccident")
@@ -47,9 +45,8 @@ public class AccidentController {
         if (!service.update(accident)) {
             model.addAttribute("message", "Ошибка при обновлении информации о автомобильном инциденте.");
             return "error";
-        } else {
-            return "redirect:/index";
         }
+        return "redirect:/index";
     }
 
 
