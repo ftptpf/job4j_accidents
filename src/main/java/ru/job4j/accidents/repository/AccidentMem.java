@@ -2,6 +2,7 @@ package ru.job4j.accidents.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.model.Type;
 
 import java.util.*;
@@ -14,25 +15,28 @@ public class AccidentMem implements Store<Accident> {
     private final Map<Integer, Accident> store = new ConcurrentHashMap<>();
 
     private AccidentMem() {
+        Set<Rule> rules = new HashSet<>();
+        rules.add(new Rule(1, "Статья 1"));
+        rules.add(new Rule(2, "Статья 2"));
+
         store.put(1,
                 new Accident(1,
                         "Авария велосипедиста",
                         "Столкнулись автомобиль и велосипедист",
                         "г.Москва, пр. Ленина 1",
-                        new Type(3, "Машина и велосипед")));
+                        new Type(3, "Машина и велосипед"), rules));
         store.put(2,
                 new Accident(2,
                         "Авария на пешеходном переходе",
                         "Автомобиль при движении задел пешехода",
                         "г.Москва, ул. Сиреневая 45",
-                        new Type(2, "Машина и человек")));
+                        new Type(2, "Машина и человек"), rules));
         store.put(3,
                 new Accident(3,
                         "Авария на парковке",
                         "При маневре Toyota задела Газель",
                         "г.Москва, ул. Тихая 18",
-                        new Type(1, "Две машины")));
-
+                        new Type(1, "Две машины"), rules));
     }
 
     /**
