@@ -10,16 +10,14 @@ import ru.job4j.accidents.model.Type;
 import ru.job4j.accidents.service.CrudService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @AllArgsConstructor
 public class AccidentController {
-    private final CrudService<Accident> serviceAccident;
-    private final CrudService<Type> serviceType;
-    private final CrudService<Rule> serviceRule;
+    private final CrudService<Accident, HttpServletRequest> serviceAccident;
+    private final CrudService<Type, HttpServletRequest> serviceType;
+    private final CrudService<Rule, HttpServletRequest> serviceRule;
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
@@ -31,10 +29,7 @@ public class AccidentController {
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, Model model, HttpServletRequest req) {
-        String[] rules = req.getParameterValues("ruleId");
-        Set<Rule> ruleSet = getRulesSet(rules);
-        accident.setRules(ruleSet);
-        Optional<Accident> accidentOptional = serviceAccident.create(accident);
+        Optional<Accident> accidentOptional = serviceAccident.create(accident, req);
         if (accidentOptional.isEmpty()) {
             model.addAttribute("message", "Ошибка при сохранении автомобильного инцидента в базе.");
             return "error";
@@ -57,24 +52,11 @@ public class AccidentController {
 
     @PostMapping("/editAccident")
     public String update(@ModelAttribute Accident accident, Model model, HttpServletRequest req) {
-        String[] rules = req.getParameterValues("ruleId");
-        Set<Rule> ruleSet = getRulesSet(rules);
-        accident.setRules(ruleSet);
-        if (!serviceAccident.update(accident)) {
-            model.addAttribute("message", "Ошибка при обновлении информации о автомобильном инциденте.");
+        if (!serviceAccident.update(accident, req)) {
+            model.addAttribute("message", "Ошибка при обновлении информации об автомобильном инциденте.");
             return "error";
         }
         return "redirect:/index";
-    }
-
-    public Set<Rule> getRulesSet(String[] rules) {
-        Set<Rule> rsl = new HashSet<>();
-        for (String id : rules) {
-            int idRule = Integer.parseInt(id);
-            Optional<Rule> ruleOptional = serviceRule.findById(idRule);
-            ruleOptional.ifPresent(rsl::add);
-        }
-        return rsl;
     }
 
 }
