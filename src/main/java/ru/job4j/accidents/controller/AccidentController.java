@@ -15,9 +15,9 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 public class AccidentController {
-    private final CrudService<Accident, HttpServletRequest> serviceAccident;
-    private final CrudService<Type, HttpServletRequest> serviceType;
-    private final CrudService<Rule, HttpServletRequest> serviceRule;
+    private final CrudService<Accident, String[]> serviceAccident;
+    private final CrudService<Type, String[]> serviceType;
+    private final CrudService<Rule, String[]> serviceRule;
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
@@ -29,7 +29,8 @@ public class AccidentController {
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, Model model, HttpServletRequest req) {
-        Optional<Accident> accidentOptional = serviceAccident.create(accident, req);
+        String[] rulesId = req.getParameterValues("ruleId");
+        Optional<Accident> accidentOptional = serviceAccident.create(accident, rulesId);
         if (accidentOptional.isEmpty()) {
             model.addAttribute("message", "Ошибка при сохранении автомобильного инцидента в базе.");
             return "error";
@@ -52,7 +53,8 @@ public class AccidentController {
 
     @PostMapping("/editAccident")
     public String update(@ModelAttribute Accident accident, Model model, HttpServletRequest req) {
-        if (!serviceAccident.update(accident, req)) {
+        String[] rulesId = req.getParameterValues("ruleId");
+        if (!serviceAccident.update(accident, rulesId)) {
             model.addAttribute("message", "Ошибка при обновлении информации об автомобильном инциденте.");
             return "error";
         }
