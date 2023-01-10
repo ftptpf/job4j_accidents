@@ -1,7 +1,8 @@
-package ru.job4j.accidents.repository;
+package ru.job4j.accidents.repository.mem;
 
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Type;
+import ru.job4j.accidents.repository.Store;
 
 import java.util.Collection;
 import java.util.Map;
