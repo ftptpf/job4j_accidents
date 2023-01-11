@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.Type;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -18,7 +19,24 @@ public class AccidentJdbcTemplate implements Store<Accident> {
     }
 
     public Collection<Accident> findAll() {
-        return null;
+        return jdbc.query(
+                """
+                    SELECT * FROM accidents
+                    INNER JOIN types
+                    ON accidents.type_id = types.id
+                    """,
+                (resultSet, rowNum) -> {
+                    Accident accident = new Accident();
+                    Type type = new Type();
+                    type.setId(resultSet.getInt("type.id"));
+                    type.setName(resultSet.getString("type.name"));
+                    accident.setId(resultSet.getInt("id"));
+                    accident.setName(resultSet.getString("name"));
+                    accident.setText(resultSet.getString("description"));
+                    accident.setAddress(resultSet.getString("address"));
+                    accident.setType(type);
+                    return accident;
+                });
     }
 
     public Optional<Accident> findById(int id) {
