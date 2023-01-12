@@ -1,17 +1,21 @@
-package ru.job4j.accidents.repository;
+package ru.job4j.accidents.repository.jdbc;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.Type;
+import ru.job4j.accidents.repository.Store;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
+@Primary
 @Repository
 @AllArgsConstructor
-public class AccidentJdbcTemplate implements Store<Accident> {
+public class AccidentJdbcStore implements Store<Accident> {
     private final JdbcTemplate jdbc;
 
     public Optional<Accident> create(Accident accident) {
@@ -35,6 +39,7 @@ public class AccidentJdbcTemplate implements Store<Accident> {
                     accident.setText(resultSet.getString("description"));
                     accident.setAddress(resultSet.getString("address"));
                     accident.setType(type);
+                    accident.setRules(new HashSet<>());
                     return accident;
                 });
     }
