@@ -3,7 +3,7 @@ package ru.job4j.accidents.service.jdbc;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.repository.Store;
 import ru.job4j.accidents.service.CrudService;
 
@@ -13,22 +13,21 @@ import java.util.Optional;
 @Primary
 @Service
 @AllArgsConstructor
-public class AccidentJdbcService implements CrudService<Accident, String[]> {
-    private final Store<Accident> store;
-
-    public Optional<Accident> create(Accident accident, String[] strings) {
+public class RuleJdbcService implements CrudService<Rule, String[]> {
+    private final Store<Rule> store;
+    public Optional<Rule> create(Rule rule, String[] strings) {
         return Optional.empty();
     }
 
-    public Collection<Accident> findAll() {
-        return store.findAll();
+    public Collection<Rule> findAll() {
+        return null;
     }
 
-    public Optional<Accident> findById(int id) {
+    public Optional<Rule> findById(int id) {
         return Optional.empty();
     }
 
-    public boolean update(Accident accident, String[] strings) {
+    public boolean update(Rule rule, String[] strings) {
         return false;
     }
 
@@ -40,5 +39,3 @@ public class AccidentJdbcService implements CrudService<Accident, String[]> {
 
     }
 }
-
-

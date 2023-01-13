@@ -25,19 +25,26 @@ public class AccidentJdbcStore implements Store<Accident> {
     public Collection<Accident> findAll() {
         return jdbc.query(
                 """
-                    SELECT * FROM accidents
+                    SELECT
+                    accidents.id accidents_id,
+                    accidents.name accidents_name,
+                    accidents.description accidents_description,
+                    accidents.address accidents_address,
+                    types.id types_id,
+                    types.name types_name
+                    FROM accidents
                     INNER JOIN types
-                    ON accidents.type_id = types.id
+                    ON accidents.type_id = types.id;
                     """,
                 (resultSet, rowNum) -> {
                     Accident accident = new Accident();
                     Type type = new Type();
-                    type.setId(resultSet.getInt("type.id"));
-                    type.setName(resultSet.getString("type.name"));
-                    accident.setId(resultSet.getInt("id"));
-                    accident.setName(resultSet.getString("name"));
-                    accident.setText(resultSet.getString("description"));
-                    accident.setAddress(resultSet.getString("address"));
+                    type.setId(resultSet.getInt("types_id"));
+                    type.setName(resultSet.getString("types_name"));
+                    accident.setId(resultSet.getInt("accidents_id"));
+                    accident.setName(resultSet.getString("accidents_name"));
+                    accident.setText(resultSet.getString("accidents_description"));
+                    accident.setAddress(resultSet.getString("accidents_address"));
                     accident.setType(type);
                     accident.setRules(new HashSet<>());
                     return accident;

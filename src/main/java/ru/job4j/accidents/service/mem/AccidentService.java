@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-@Service
+
 @AllArgsConstructor
 public class AccidentService implements CrudService<Accident, String[]> {
     private final Store<Accident> storeAccident;

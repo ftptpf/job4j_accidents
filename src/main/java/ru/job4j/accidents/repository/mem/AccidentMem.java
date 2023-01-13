@@ -1,6 +1,5 @@
 package ru.job4j.accidents.repository.mem;
 
-import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.model.Type;
@@ -10,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
+
 public class AccidentMem implements Store<Accident> {
     private final AtomicInteger mapKey = new AtomicInteger(4);
     private final Map<Integer, Accident> store = new ConcurrentHashMap<>();
