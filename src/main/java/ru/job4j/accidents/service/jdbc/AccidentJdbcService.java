@@ -1,8 +1,6 @@
 package ru.job4j.accidents.service.jdbc;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.repository.Store;
 import ru.job4j.accidents.service.CrudService;
@@ -10,8 +8,8 @@ import ru.job4j.accidents.service.CrudService;
 import java.util.Collection;
 import java.util.Optional;
 
-@Primary
-@Service
+/*@Primary
+@Service*/
 @AllArgsConstructor
 public class AccidentJdbcService implements CrudService<Accident, String[]> {
     private final Store<Accident> store;

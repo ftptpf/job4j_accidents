@@ -42,7 +42,20 @@ public class AccidentJdbcStore implements Store<Accident> {
     };
 
     public Optional<Accident> create(Accident accident) {
-        return Optional.empty();
+        String sql = """
+                INSERT INTO 
+                accidents (name, description, address, type_id) 
+                VALUES (?, ?, ?, ?);
+                INSERT INTO accidents_rules(accident_id, rule_id) 
+                VALUES (?, ?);
+                """;
+        Accident accidentFromBase = jdbc.queryForObject(sql, accidentRowMapper,
+                accident.getName(),
+                accident.getText(),
+                accident.getAddress(),
+                accident.getType().getId()
+                );
+        return Optional.ofNullable(accidentFromBase);
     }
 
     public Collection<Accident> findAll() {
@@ -88,17 +101,12 @@ public class AccidentJdbcStore implements Store<Accident> {
     }
 
     public boolean remove(int id) {
-        String sqlDeleteAccidentsRules = """
-                DELETE FROM ONLY accidents_rules ar
-                WHERE ar.accident_id = ?;
+        String sql = """
+                DELETE FROM
+                accidents
+                WHERE accidents.id = ?;
                 """;
-        String sqlDeleteAccidents = """
-                DELETE FROM ONLY accidents a
-                WHERE a.id = ?;
-                """;
-        int deleteAccidentRule = jdbc.update(sqlDeleteAccidentsRules);
-        int d2 = jdbc.update(sqlDeleteAccidents);
-        return (deleteAccidentRule > 0 && d2 > 0);
+        return jdbc.update(sql, id) > 0;
     }
 
     public void removeAll() {
@@ -111,14 +119,14 @@ public class AccidentJdbcStore implements Store<Accident> {
 
     private Set<Rule> getRules(int id) {
         String sql = """
-                    SELECT
-                    rules.id rule_id,
-                    rules.name rules_name
-                    FROM accidents_rules
-                    INNER JOIN rules
-                    ON accidents_rules.rule_id = rules.id
-                    WHERE accidents_rules.accident_id = ?;
-                    """;
+                SELECT
+                rules.id rule_id,
+                rules.name rules_name
+                FROM accidents_rules
+                INNER JOIN rules
+                ON accidents_rules.rule_id = rules.id
+                WHERE accidents_rules.accident_id = ?;
+                """;
         List<Rule> ruleList = jdbc.query(sql, ruleRowMapper, id);
         return new HashSet<>(ruleList);
     }

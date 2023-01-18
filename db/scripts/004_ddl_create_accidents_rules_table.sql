@@ -1,6 +1,6 @@
 CREATE TABLE accidents_rules (
     id SERIAL PRIMARY KEY ,
-    accident_id INTEGER REFERENCES accidents (id) ,
+    accident_id INTEGER REFERENCES accidents (id) ON DELETE CASCADE ,
     rule_id INTEGER REFERENCES rules (id)
 );
 
