@@ -43,19 +43,23 @@ public class AccidentJdbcStore implements Store<Accident> {
 
     public Optional<Accident> create(Accident accident) {
         String sql = """
-                INSERT INTO 
+                INSERT INTO
                 accidents (name, description, address, type_id) 
                 VALUES (?, ?, ?, ?);
-                INSERT INTO accidents_rules(accident_id, rule_id) 
-                VALUES (?, ?);
                 """;
-        Accident accidentFromBase = jdbc.queryForObject(sql, accidentRowMapper,
+        List<Accident> accidentList = jdbc.query(sql, accidentRowMapper,
                 accident.getName(),
                 accident.getText(),
                 accident.getAddress(),
                 accident.getType().getId()
                 );
-        return Optional.ofNullable(accidentFromBase);
+        Optional<Accident> optionalAccident = Optional.empty();
+        if (!accidentList.isEmpty()) {
+            optionalAccident = Optional.of(accidentList.get(0));
+            setRules(optionalAccident.get().getId(),
+                    optionalAccident.get().getRules());
+        }
+        return optionalAccident;
     }
 
     public Collection<Accident> findAll() {
@@ -94,10 +98,23 @@ public class AccidentJdbcStore implements Store<Accident> {
 
     public boolean update(Accident accident) {
         String sql = """
-                INSERT INTO
-                accidents ()
+                UPDATE
+                accidents
+                SET
+                name = ?,
+                description = ?,
+                address = ?,
+                type_id = ?
+                WHERE accidents.id = ?;
                 """;
-        return false;
+        int rowsCreated = jdbc.update(sql,
+                accident.getName(),
+                accident.getText(),
+                accident.getAddress(),
+                accident.getType().getId()
+        );
+        setRules(accident.getId(), accident.getRules());
+        return rowsCreated > 0;
     }
 
     public boolean remove(int id) {
@@ -129,5 +146,17 @@ public class AccidentJdbcStore implements Store<Accident> {
                 """;
         List<Rule> ruleList = jdbc.query(sql, ruleRowMapper, id);
         return new HashSet<>(ruleList);
+    }
+
+    private void setRules(int idAccident, Set<Rule> ruleSet) {
+        String sql = """
+                INSERT INTO
+                accidents_rules (accident_id, rule_id) 
+                VALUES (?, ?);
+                """;
+        for (Rule rule : ruleSet) {
+            jdbc.query(sql, ruleRowMapper, idAccident, rule.getId());
+        }
+
     }
 }
