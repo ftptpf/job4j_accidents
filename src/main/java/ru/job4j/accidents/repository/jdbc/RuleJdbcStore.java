@@ -25,7 +25,6 @@ public class RuleJdbcStore implements Store<Rule> {
     };
 
     public Optional<Rule> create(Rule rule) {
-        //TODO
         return Optional.empty();
     }
 
@@ -52,16 +51,13 @@ public class RuleJdbcStore implements Store<Rule> {
     }
 
     public boolean update(Rule rule) {
-        //TODO
         return false;
     }
 
     public boolean remove(int id) {
-        //TODO
         return false;
     }
 
     public void removeAll() {
-        //TODO
     }
 }

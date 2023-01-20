@@ -24,7 +24,6 @@ public class TypeJdbcStore implements Store<Type> {
         return type;
     };
     public Optional<Type> create(Type type) {
-        //TODO
         return Optional.empty();
     }
 
@@ -51,16 +50,13 @@ public class TypeJdbcStore implements Store<Type> {
     }
 
     public boolean update(Type type) {
-        //TODO
         return false;
     }
 
     public boolean remove(int id) {
-        //TODO
         return false;
     }
 
     public void removeAll() {
-        //TODO
     }
 }
