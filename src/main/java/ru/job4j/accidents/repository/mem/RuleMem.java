@@ -1,6 +1,5 @@
 package ru.job4j.accidents.repository.mem;
 
-import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.repository.Store;
 

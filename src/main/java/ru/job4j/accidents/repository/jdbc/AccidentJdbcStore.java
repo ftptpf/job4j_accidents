@@ -24,7 +24,6 @@ public class AccidentJdbcStore implements Store<Accident> {
         accident.setName(resultSet.getString("accidents_name"));
         accident.setText(resultSet.getString("accidents_description"));
         accident.setAddress(resultSet.getString("accidents_address"));
-
         Type type = new Type();
         type.setId(resultSet.getInt("types_id"));
         type.setName(resultSet.getString("types_name"));
@@ -45,21 +44,15 @@ public class AccidentJdbcStore implements Store<Accident> {
         String sql = """
                 INSERT INTO
                 accidents (name, description, address, type_id) 
-                VALUES (?, ?, ?, ?);
+                VALUES (?, ?, ?, ?) RETURNING id;
                 """;
-        List<Accident> accidentList = jdbc.query(sql, accidentRowMapper,
+        int id = jdbc.queryForObject(sql, Integer.class,
                 accident.getName(),
                 accident.getText(),
                 accident.getAddress(),
-                accident.getType().getId()
-                );
-        Optional<Accident> optionalAccident = Optional.empty();
-        if (!accidentList.isEmpty()) {
-            optionalAccident = Optional.of(accidentList.get(0));
-            setRules(optionalAccident.get().getId(),
-                    optionalAccident.get().getRules());
-        }
-        return optionalAccident;
+                accident.getType().getId());
+        setRules(id, accident.getRules());
+        return findById(id);
     }
 
     public Collection<Accident> findAll() {
@@ -100,21 +93,18 @@ public class AccidentJdbcStore implements Store<Accident> {
         String sql = """
                 UPDATE
                 accidents
-                SET
-                name = ?,
-                description = ?,
-                address = ?,
-                type_id = ?
-                WHERE accidents.id = ?;
+                SET 
+                name = ?, description = ?, address = ?, type_id =? 
+                WHERE id = ?;
                 """;
-        int rowsCreated = jdbc.update(sql,
+        int numberUpdatedRows = jdbc.update(sql,
                 accident.getName(),
                 accident.getText(),
                 accident.getAddress(),
-                accident.getType().getId()
-        );
+                accident.getType().getId(),
+                accident.getId());
         setRules(accident.getId(), accident.getRules());
-        return rowsCreated > 0;
+        return numberUpdatedRows > 0;
     }
 
     public boolean remove(int id) {
@@ -128,10 +118,10 @@ public class AccidentJdbcStore implements Store<Accident> {
 
     public void removeAll() {
         String sql = """
-                TRUNCATE accidents_rules, accidents RESTART IDENTITY;
+                TRUNCATE accidents_rules, accidents 
+                RESTART IDENTITY;
                 """;
         jdbc.update(sql);
-
     }
 
     private Set<Rule> getRules(int id) {
@@ -149,14 +139,19 @@ public class AccidentJdbcStore implements Store<Accident> {
     }
 
     private void setRules(int idAccident, Set<Rule> ruleSet) {
+        String sqlDeleteRowWithId = """
+                DELETE FROM accidents_rules
+                WHERE accident_id = ?
+                """;
         String sql = """
                 INSERT INTO
                 accidents_rules (accident_id, rule_id) 
                 VALUES (?, ?);
                 """;
+        jdbc.update(sqlDeleteRowWithId, idAccident);
         for (Rule rule : ruleSet) {
-            jdbc.query(sql, ruleRowMapper, idAccident, rule.getId());
+            jdbc.update(sql, idAccident, rule.getId());
         }
-
     }
+
 }
