@@ -26,7 +26,10 @@ public class AccidentHibernateStore implements Store<Accident> {
 
     public Collection<Accident> findAll() {
         try (Session session = sf.openSession()) {
-            return session.createQuery("FROM Accident ", Accident.class).list();
+            return session.createQuery("FROM Accident a JOIN FETCH a.rules", Accident.class)
+                    .getResultStream()
+                    .distinct()
+                    .toList();
         }
     }
 
