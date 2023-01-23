@@ -1,7 +1,6 @@
 package ru.job4j.accidents.repository.jdbc;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -12,7 +11,6 @@ import ru.job4j.accidents.repository.Store;
 
 import java.util.*;
 
-@Primary
 @Repository
 @AllArgsConstructor
 public class AccidentJdbcStore implements Store<Accident> {

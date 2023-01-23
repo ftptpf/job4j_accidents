@@ -1,7 +1,6 @@
 package ru.job4j.accidents.repository.jdbc;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,6 @@ import ru.job4j.accidents.repository.Store;
 import java.util.Collection;
 import java.util.Optional;
 
-@Primary
 @Repository
 @AllArgsConstructor
 public class RuleJdbcStore implements Store<Rule> {
