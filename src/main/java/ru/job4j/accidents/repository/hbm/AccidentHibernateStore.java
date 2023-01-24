@@ -19,8 +19,10 @@ public class AccidentHibernateStore implements Store<Accident> {
 
     public Optional<Accident> create(Accident accident) {
         try (Session session = sf.openSession()) {
-            int id = (int) session.save(accident);
-            return id != 0 ? Optional.of(accident) : Optional.empty();
+/*            int id = (int) session.save(accident);
+            return id != 0 ? Optional.of(accident) : Optional.empty();*/
+            session.saveOrUpdate(accident);
+            return Optional.of(accident);
         }
     }
 
@@ -61,6 +63,5 @@ public class AccidentHibernateStore implements Store<Accident> {
         try (Session session = sf.openSession()) {
             session.createSQLQuery("TRUNCATE accidents_rules, accidents RESTART IDENTITY");
         }
-
     }
 }
