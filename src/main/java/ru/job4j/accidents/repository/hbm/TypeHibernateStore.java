@@ -28,7 +28,11 @@ public class TypeHibernateStore implements Store<Type> {
     }
 
     public Optional<Type> findById(int id) {
-        return Optional.empty();
+        try (Session session = sf.openSession()) {
+            return session.createQuery("FROM Type t WHERE t.id = :fId", Type.class)
+                    .setParameter("fId", id)
+                    .uniqueResultOptional();
+        }
     }
 
     public boolean update(Type type) {

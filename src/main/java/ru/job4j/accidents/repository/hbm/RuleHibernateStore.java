@@ -28,7 +28,11 @@ public class RuleHibernateStore implements Store<Rule> {
     }
 
     public Optional<Rule> findById(int id) {
-        return Optional.empty();
+        try (Session session = sf.openSession()) {
+            return session.createQuery("FROM Rule r WHERE r.id = :fId", Rule.class)
+                    .setParameter("fId", id)
+                    .uniqueResultOptional();
+        }
     }
 
     public boolean update(Rule rule) {

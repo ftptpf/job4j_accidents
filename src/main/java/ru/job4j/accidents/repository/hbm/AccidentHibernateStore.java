@@ -19,8 +19,8 @@ public class AccidentHibernateStore implements Store<Accident> {
 
     public Optional<Accident> create(Accident accident) {
         try (Session session = sf.openSession()) {
-            session.save(accident);
-            return Optional.ofNullable(accident);
+            int id = (int) session.save(accident);
+            return id != 0 ? Optional.of(accident) : Optional.empty();
         }
     }
 
@@ -34,18 +34,33 @@ public class AccidentHibernateStore implements Store<Accident> {
     }
 
     public Optional<Accident> findById(int id) {
-        return Optional.empty();
+        try (Session session = sf.openSession()) {
+            return session.createQuery("FROM Accident a JOIN FETCH a.rules WHERE a.id = :fId", Accident.class)
+                    .setParameter("fId", id)
+                    .uniqueResultOptional();
+        }
     }
 
     public boolean update(Accident accident) {
-        return false;
+        try (Session session = sf.openSession()) {
+            session.update(accident);
+            return true;
+        }
     }
 
     public boolean remove(int id) {
-        return false;
+        try (Session session = sf.openSession()) {
+            Accident accident = (Accident) session.createQuery("DELETE FROM Accident a WHERE a.id = :fId")
+                    .setParameter("fId", id)
+                    .getSingleResult();
+            return accident.getId() == id;
+        }
     }
 
     public void removeAll() {
+        try (Session session = sf.openSession()) {
+            session.createSQLQuery("TRUNCATE accidents_rules, accidents RESTART IDENTITY");
+        }
 
     }
 }
