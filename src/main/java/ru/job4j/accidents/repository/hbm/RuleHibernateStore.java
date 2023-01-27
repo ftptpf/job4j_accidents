@@ -11,7 +11,7 @@ import ru.job4j.accidents.repository.Store;
 import java.util.Collection;
 import java.util.Optional;
 
-@Primary
+/*@Primary*/
 @Repository
 @AllArgsConstructor
 public class RuleHibernateStore implements Store<Rule> {

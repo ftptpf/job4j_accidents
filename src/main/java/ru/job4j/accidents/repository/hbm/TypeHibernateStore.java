@@ -3,7 +3,6 @@ package ru.job4j.accidents.repository.hbm;
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Type;
 import ru.job4j.accidents.repository.Store;
@@ -11,7 +10,7 @@ import ru.job4j.accidents.repository.Store;
 import java.util.Collection;
 import java.util.Optional;
 
-@Primary
+/*@Primary*/
 @Repository
 @AllArgsConstructor
 public class TypeHibernateStore implements Store<Type> {
