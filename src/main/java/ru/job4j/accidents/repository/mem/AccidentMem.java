@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class AccidentMem implements Store<Accident> {
+public class AccidentMem implements Store<Accident, Integer> {
     private final AtomicInteger mapKey = new AtomicInteger(4);
     private final Map<Integer, Accident> store = new ConcurrentHashMap<>();
 
@@ -63,7 +63,7 @@ public class AccidentMem implements Store<Accident> {
      * @param id ключ map
      * @return Optional с найденным значением, либо пустой Optional
      */
-    public Optional<Accident> findById(int id) {
+    public Optional<Accident> findById(Integer id) {
         return Optional.ofNullable(store.get(id));
     }
 
@@ -83,7 +83,7 @@ public class AccidentMem implements Store<Accident> {
      * @param id ключ map
      * @return true - если удаление прошло успешно, в ином случае false
      */
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         return store.remove(id) != null;
     }
 

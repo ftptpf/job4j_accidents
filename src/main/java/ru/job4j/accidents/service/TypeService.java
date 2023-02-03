@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class TypeService implements CrudService<Type, String[]> {
-    private final Store<Type> store;
+    private final Store<Type, Integer> store;
 
     public Optional<Type> create(Type type, String[] str) {
         return store.create(type);

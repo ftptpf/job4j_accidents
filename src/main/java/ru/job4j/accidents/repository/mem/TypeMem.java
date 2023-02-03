@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class TypeMem implements Store<Type> {
+public class TypeMem implements Store<Type, Integer> {
     private final AtomicInteger mapKey = new AtomicInteger(4);
     private final Map<Integer, Type> store = new ConcurrentHashMap<>();
 
@@ -30,7 +30,7 @@ public class TypeMem implements Store<Type> {
         return store.values();
     }
 
-    public Optional<Type> findById(int id) {
+    public Optional<Type> findById(Integer id) {
         return Optional.ofNullable(store.get(id));
     }
 
@@ -38,7 +38,7 @@ public class TypeMem implements Store<Type> {
         return store.replace(type.getId(), type) != null;
     }
 
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         return store.remove(id) != null;
     }
 

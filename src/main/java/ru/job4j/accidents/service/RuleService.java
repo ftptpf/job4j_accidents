@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class RuleService implements CrudService<Rule, String[]> {
-    private final Store<Rule> store;
+    private final Store<Rule, Integer> store;
 
     public Optional<Rule> create(Rule rule, String[] str) {
         return store.create(rule);

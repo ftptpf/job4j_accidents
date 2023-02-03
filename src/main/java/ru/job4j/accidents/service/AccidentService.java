@@ -15,9 +15,9 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class AccidentService implements CrudService<Accident, String[]> {
-    private final Store<Accident> storeAccident;
-    private final Store<Type> storeType;
-    private final Store<Rule> storeRule;
+    private final Store<Accident, Integer> storeAccident;
+    private final Store<Type, Integer> storeType;
+    private final Store<Rule, Integer> storeRule;
 
     public Optional<Accident> create(Accident accident, String[] rulesId) {
         Optional<Type> typeOptional = storeType.findById(accident.getType().getId());
