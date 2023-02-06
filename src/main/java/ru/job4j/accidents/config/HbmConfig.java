@@ -28,6 +28,7 @@ public class HbmConfig {
         cfg.setProperty("hibernate.dialect", dialect);
         cfg.setProperty("hibernate.show_sql", "true");
         cfg.setProperty("hibernate.format_sql", "true");
+        cfg.setProperty("hibernate.hbm2ddl.auto", "validate");
         sessionFactory.setHibernateProperties(cfg);
         return sessionFactory;
     }

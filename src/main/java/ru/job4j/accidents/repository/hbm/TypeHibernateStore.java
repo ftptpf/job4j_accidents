@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 /*@Primary*/
-@Repository
+/*@Repository*/
 @AllArgsConstructor
-public class TypeHibernateStore implements Store<Type> {
+public class TypeHibernateStore implements Store<Type, Integer> {
     private final SessionFactory sf;
 
     public Optional<Type> create(Type type) {
@@ -26,7 +26,7 @@ public class TypeHibernateStore implements Store<Type> {
         }
     }
 
-    public Optional<Type> findById(int id) {
+    public Optional<Type> findById(Integer id) {
         try (Session session = sf.openSession()) {
             return session.createQuery("FROM Type t WHERE t.id = :fId", Type.class)
                     .setParameter("fId", id)
@@ -38,7 +38,7 @@ public class TypeHibernateStore implements Store<Type> {
         return false;
     }
 
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         return false;
     }
 

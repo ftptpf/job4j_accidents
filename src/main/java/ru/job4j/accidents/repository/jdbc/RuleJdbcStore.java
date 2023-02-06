@@ -10,9 +10,9 @@ import ru.job4j.accidents.repository.Store;
 import java.util.Collection;
 import java.util.Optional;
 
-@Repository
+/*@Repository*/
 @AllArgsConstructor
-public class RuleJdbcStore implements Store<Rule> {
+public class RuleJdbcStore implements Store<Rule, Integer> {
     private final JdbcTemplate jdbc;
 
     private final RowMapper<Rule> ruleRowMapper = (resultSet, rowNum) -> {
@@ -36,7 +36,7 @@ public class RuleJdbcStore implements Store<Rule> {
         return jdbc.query(sql, ruleRowMapper);
     }
 
-    public Optional<Rule> findById(int id) {
+    public Optional<Rule> findById(Integer id) {
         String sql = """
                 SELECT
                 rules.id rule_id,
@@ -52,7 +52,7 @@ public class RuleJdbcStore implements Store<Rule> {
         return false;
     }
 
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         return false;
     }
 

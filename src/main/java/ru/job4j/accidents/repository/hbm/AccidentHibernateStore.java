@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 /*@Primary*/
-@Repository
+/*@Repository*/
 @AllArgsConstructor
-public class AccidentHibernateStore implements Store<Accident> {
+public class AccidentHibernateStore implements Store<Accident, Integer> {
     private final SessionFactory sf;
 
     public Optional<Accident> create(Accident accident) {
@@ -40,7 +40,7 @@ public class AccidentHibernateStore implements Store<Accident> {
         }
     }
 
-    public Optional<Accident> findById(int id) {
+    public Optional<Accident> findById(Integer id) {
         try (Session session = sf.openSession()) {
             session.beginTransaction();
             Optional<Accident> accidentOptional = session.createQuery(
@@ -61,7 +61,7 @@ public class AccidentHibernateStore implements Store<Accident> {
         }
     }
 
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         try (Session session = sf.openSession()) {
             session.beginTransaction();
             Accident accident = (Accident) session.createQuery("DELETE FROM Accident a WHERE a.id = :fId")

@@ -11,9 +11,9 @@ import ru.job4j.accidents.repository.Store;
 
 import java.util.*;
 
-@Repository
+/*@Repository*/
 @AllArgsConstructor
-public class AccidentJdbcStore implements Store<Accident> {
+public class AccidentJdbcStore implements Store<Accident, Integer> {
     private final JdbcTemplate jdbc;
 
     /**
@@ -176,12 +176,12 @@ public class AccidentJdbcStore implements Store<Accident> {
         return jdbc.query(SQL_GET_ALL_ACCIDENTS, accidentListResultSetExtractor);
     }
 
-    public Optional<Accident> findById(int id) {
+    public Optional<Accident> findById(Integer id) {
         Accident accident = jdbc.query(SQL_GET_ACCIDENT_BY_ID, accidentResultSetExtractor, id);
         return Optional.ofNullable(accident);
     }
 
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         return jdbc.update(SQL_REMOVE_ACCIDENT_BY_ID, id) > 0;
     }
 

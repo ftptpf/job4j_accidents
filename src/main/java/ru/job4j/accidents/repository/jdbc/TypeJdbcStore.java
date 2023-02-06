@@ -10,9 +10,9 @@ import ru.job4j.accidents.repository.Store;
 import java.util.Collection;
 import java.util.Optional;
 
-@Repository
+/*@Repository*/
 @AllArgsConstructor
-public class TypeJdbcStore implements Store<Type> {
+public class TypeJdbcStore implements Store<Type, Integer> {
     private final JdbcTemplate jdbc;
 
     private final RowMapper<Type> typeRowMapper = (resultSet, rowNum) -> {
@@ -35,7 +35,7 @@ public class TypeJdbcStore implements Store<Type> {
         return jdbc.query(sql, typeRowMapper);
     }
 
-    public Optional<Type> findById(int id) {
+    public Optional<Type> findById(Integer id) {
         String sql = """
                 SELECT
                 types.id type_id,
@@ -51,7 +51,7 @@ public class TypeJdbcStore implements Store<Type> {
         return false;
     }
 
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         return false;
     }
 

@@ -12,9 +12,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 /*@Primary*/
-@Repository
+/*@Repository*/
 @AllArgsConstructor
-public class RuleHibernateStore implements Store<Rule> {
+public class RuleHibernateStore implements Store<Rule, Integer> {
     private final SessionFactory sf;
 
     public Optional<Rule> create(Rule rule) {
@@ -27,7 +27,7 @@ public class RuleHibernateStore implements Store<Rule> {
         }
     }
 
-    public Optional<Rule> findById(int id) {
+    public Optional<Rule> findById(Integer id) {
         try (Session session = sf.openSession()) {
             return session.createQuery("FROM Rule r WHERE r.id = :fId", Rule.class)
                     .setParameter("fId", id)
@@ -39,7 +39,7 @@ public class RuleHibernateStore implements Store<Rule> {
         return false;
     }
 
-    public boolean remove(int id) {
+    public boolean remove(Integer id) {
         return false;
     }
 
